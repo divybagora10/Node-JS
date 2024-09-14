@@ -1,5 +1,6 @@
-const users = [
-    
-]
+const { default: mongoose } = require("mongoose");
+const userSchema = require("./model/user")
 
-module.exports = users;
+const User = mongoose.model("user",userSchema);
+
+module.exports = User;

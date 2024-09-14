@@ -4,6 +4,8 @@ const productRoute = require("./route/product");
 const userController = require("./controller/user")
 const connectionDb = require("./config/db");
 const connectDb = require("./config/db");
+const userSchema = require("./model/user");
+const { default: mongoose } = require("mongoose");
 // express come in the form of function
 
 const app = express();
@@ -11,6 +13,8 @@ const app = express();
 app.use(express.json());
 
 connectDb();
+
+// const User = mongoose.model("user",userSchema);
 
 const users = [
     {

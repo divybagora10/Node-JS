@@ -3,13 +3,23 @@ const User = require("../user")
 // const User = mongoose.model("user",userSchema);
 
 exports.getUsers = async(req,res)=>{
-    const user = await User.findById (req.params.id);
-    if (!user) {
-        res.send({message : "user not found"});
+
+    try {
+        const users = await User.find();
+        res.status(200).send({message : "user fetched"  , data : users})
+        
+    } catch (error) {
+        res.status(500).send(error);
     }
-    else {
-        res.send({message : "user dertails are:" , data : user});
-    }
+    // const user = await User.findById (req.params.id);
+    // if (!user) {
+    //     res.send({message : "user not found"});
+    // }
+    // else {
+    //     res.send({message : "user dertails are:" , data : user});
+    // }
+
+    //---------------------------------------------
 
     // this method is used to get user details by id entered by the admin
 
@@ -29,28 +39,71 @@ exports.getUsers = async(req,res)=>{
 }
 
 exports.createUser = async (req,res) =>{
-    const body = req.body
-    if (
-        !body ||
-        !body.firstName||
-        !body.lastName ||
-        !body.email||
-        !body.contactDetails||
-        !body.gender
-    ){
-        return res.status(400).send({message :"All fields are required"})
+
+    // const userData = req.body;
+
+    // if (!userData.firstName||
+    //     !userData.lastName||
+    //     !userData.email||
+    //     !userData.contactDetails||
+    //     !userData.gender
+    // ){
+    //     res.status(404).send({message : "all fields are required"});
+    // }
+    
+
+    try {
+
+   
+    const {firstName , lastName , email, contactDetails , gender} = req.body;
+    const user  = new User({firstName : firstName , lastName : lastName , email : email, contactDetails : contactDetails , gender :gender});
+
+    const existingUser= await User.findOne({email :email}); // to check the email already exits or not 
+    console.log(existingUser)
+
+    if (existingUser){
+        return res.status(400).send({message : "user already exits"});
+    } 
+
+    await user.save();
+    res.status(200).send({message : "user created", data : user});
+        
+    } catch (error) {
+        res.status(400).send(error);
     }
 
-    const result = await User.create({
-        firstName : body.firstName,
-        lastName : body.lastName,
-        email : body.email,
-        contactDetails : body.contactDetails,
-        gender : body.gender
-    }); 
-    console.log(result);
 
-    return res.status(201).json({msg:"Success"})
+    
+
+    //---------------------------------
+   
+
+    // const body = req.body
+    // if (
+    //     !body ||
+    //     !body.firstName||
+    //     !body.lastName ||
+    //     !body.email||
+    //     !body.contactDetails||
+    //     !body.gender
+    // ){
+    //     return res.status(400).send({message :"All fields are required"})
+    // }
+
+
+
+    // const result = await User.create({
+    //     firstName : body.firstName,
+    //     lastName : body.lastName,
+    //     email : body.email,
+    //     contactDetails : body.contactDetails,
+    //     gender : body.gender
+    // }); 
+    // console.log(result);
+
+    // return res.status(201).json({msg:"Success"})
+
+    //----------------------------------------------------------------
 
     // const data = req.body;
     // const modifiedData ={id : users.length+1, ...data};

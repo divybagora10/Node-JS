@@ -6,11 +6,14 @@ const connectionDb = require("./config/db");
 const connectDb = require("./config/db");
 const userSchema = require("./model/user");
 const { default: mongoose } = require("mongoose");
+const cors = require("cors")
 // express come in the form of function
+
 
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 connectDb();
 
@@ -29,7 +32,7 @@ const middleWare1 = (req,res,next) =>{
     next();
 }
 
-app.use(middleWare1);
+// app.use(middleWare1);
 
 app.use("/api",userRouters); // http://localhost:3000/api/user
 app.use("/products",productRoute);

@@ -6,7 +6,7 @@ const router = express.Router();
 const middleware1 = require("../middleware/middleware1")
 
 
-router.get ("/user/:id",userController.getUsers);
+router.get ("/user",userController.getUsers);
 // router.get("/user",(req,res)=>{
 //     // http://localhost:3000/api/user
 
